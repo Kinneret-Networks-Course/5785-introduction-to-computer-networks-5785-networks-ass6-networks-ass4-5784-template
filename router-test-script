@@ -1,0 +1,129 @@
+#!/bin/bash
+
+outdir="outfiles"
+test1_serverout="$outdir/test1-server-output.txt"
+test1_clientout="$outdir/test1-client-output.txt"
+test2_clientout="$outdir/test2-client-output.txt"
+test3_clientout="$outdir/test3-client-output.txt"
+test4_clientout="$outdir/test4-client-output.txt"
+
+test2_serverout="$outdir/test2-server-output.txt"
+test5_clientout="$outdir/test5-client-output.txt"
+test6_clientout="$outdir/test6-client-output.txt"
+test7_clientout="$outdir/test7-client-output.txt"
+test8_clientout="$outdir/test8-client-output.txt"
+test9_clientout="$outdir/test9-client-output.txt"
+
+test3_serverout="$outdir/test3-server-output.txt"
+test10_clientout="$outdir/test10-client-output.txt"
+
+test11_serverout="$outdir/test11-server-output.txt"
+test12_serverout="$outdir/test12-server-output.txt"
+test13_serverout="$outdir/test13-server-output.txt"
+test14_serverout="$outdir/test14-server-output.txt"
+test15_serverout="$outdir/test15-server-output.txt"
+test16_serverout="$outdir/test16-server-output.txt"
+
+test17_clientout="$outdir/test17-client-output.txt"
+test18_clientout="$outdir/test18-client-output.txt"
+test19_clientout="$outdir/test19-client-output.txt"
+test20_clientout="$outdir/test20-client-output.txt"
+test21_clientout="$outdir/test21-client-output.txt"
+test22_clientout="$outdir/test22-client-output.txt"
+
+if [ ! -d "$outdir" ]; then
+    # Create the directory if it doesn't exist
+    mkdir "$outdir"
+else
+    # If the directory exists, check if it's empty
+    if [ "$(ls -A "$outdir")" ]; then
+        # If the directory is not empty, clear its contents
+        rm -rf "$outdir"/*
+    fi
+fi
+java -jar Router-5785.jar -ip=127.0.0.1 -port=5050 -table=short-router-table.txt > "$test1_serverout" &
+shorter_router_pid=$!
+echo Started Server1
+sleep 5
+
+echo Test1
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5050 -addresses=21.0.58.150,21.0.58.1,21.0.57.200,21.0.49.6,21.0.40.8,21.0.58.150,22.100.144.55 > "$test1_clientout"
+
+echo Test2
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5050 -addresses=21.126.128.5,85.249.95.171,159.129.120.134,148.240.87.240,13.133.56.218 > "$test2_clientout"
+
+echo Test3
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5050 -addresses=205.181.189.90,176.29.92.149,81.212.167.197,150.224.181.232,21.12.33.113,52.138.121.125,21.64.59.209,133.126.27.255,56.67.13.81,21.154.101.150 > "$test3_clientout"
+
+echo Test4
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5050 -addresses=21.100.25.12,21.5.2 > "$test4_clientout"
+
+kill "$shorter_router_pid"
+
+java -jar Router-5785.jar -ip=127.0.0.1 -port=5051 -table=long-router-table.txt > "$test2_serverout" &
+longer_router_pid=$!
+sleep 5
+echo Started Server2
+
+echo Test5
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5051 -addresses=85.249.95.171,159.129.120.134,2.50.25.12,148.240.87.240,13.133.56.218,74.186.187.75 > "$test5_clientout"
+
+echo Test6
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5051 -addresses=2.27.193.114,6.8.97.45,118.138.154.79 > "$test6_clientout"
+
+echo Test7
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5051 -addresses=59.79.130.93,121.227.252.126,2.12.22.22,197.168.47.14,197.168.47.13 > "$test7_clientout"
+
+echo Test8
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5051 -addresses=205.181.189.90,176.29.92.149,81.212.167.197,1.1.1,150.224.181.232,89.12.33.113,52.138.121.125,58.64.59.209,23.126.27.255,56.67.13.81,105.154.101.150 > "$test8_clientout"
+
+echo Test9
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5051 -addresses=68.189.142.23,190.179.212.203,17.70.51.141,9.255.108.148,189.160.222.218,196.81.140.48,1.210.190.23,218.18.55.31,48.199.220.76,220.27.167.223,110.80.10.153,90.98.72.196,43.96.28.233,195.213.11.44,67.57.128.177,99.207.130.137,37.6.69.115,8.168.165.181,159.136.68.67,47.176.108.153,77.92.255.57 > "$test9_clientout"
+
+kill "$longer_router_pid"
+
+java -jar Router-5785.jar -ip=127.0.0.1 -port=5052 -table=long-router-table.txt > "$test3_serverout" &
+multiclient_router_pid=$!
+echo Started Server3
+sleep 5
+
+echo Test10
+./MultiClient 127.0.0.1 5052 85.249.95.171,159.129.120.134,6.9.22.9,22.23.3.2,1.1.1,148.240.87.240,13.133.56.218,74.186.187.75 85.249.95.171,159.129.120.134,148.240.87.240,2.33.56.218,74.186.187.75,21.5.10.6 59.79.130.93,1.23.23.0,121.227.252.126,197.168.47.13 > "$test10_clientout"
+
+kill "$multiclient_router_pid"
+
+echo Router Fail Missing Parameter 1
+java -jar Router-5785.jar -port=5052 -table=long-router-table.txt > "$test11_serverout"
+
+echo Router Fail Missing Parameter 2
+java -jar Router-5785.jar -ip=127.0.0.1 -table=long-router-table.txt > "$test12_serverout"
+
+echo Router Fail Missing Parameter 3
+java -jar Router-5785.jar -ip=127.0.0.1 -port=5052 > "$test13_serverout"
+
+echo Router Fail Illegal Parameter 1
+java -jar Router-5785.jar -ip=127.0.0.1 -port=abab -table=long-router-table.txt > "$test14_serverout"
+
+echo Router Fail Illegal Parameter 2
+java -jar Router-5785.jar -ip=abcdef -port=5053 -table=long-router-table.txt > "$test15_serverout"
+
+echo Router Fail Illegal Parameter 3
+java -jar Router-5785.jar -ip=127.0.0.1 -port=5053 -table=nonexistentfile > "$test16_serverout"
+
+echo Client Fail Missing Parameter 1
+java -jar Client-5785.jar -port=5051 -addresses=68.189.142.23,190.179.212.203 > "$test17_clientout"
+
+echo Client Fail Missing Parameter 2
+java -jar Client-5785.jar -dest=127.0.0.1 -addresses=68.189.142.23,190.179.212.203 > "$test18_clientout"
+
+echo Client Fail Missing Parameter 3
+java -jar Client-5785.jar -dest=127.0.0.1 -port=5051 > "$test19_clientout"
+
+echo Client Fail Illegal Parameter 1
+java -jar Client-5785.jar -dest=abcdef -port=5051 -addresses=68.189.142.23 > "$test20_clientout"
+
+echo Client Fail Illegal Parameter 2
+java -jar Client-5785.jar -dest=127.0.0.1 -port=cats -addresses=68.189.142.23 > "$test21_clientout"
+
+echo Client Fail Illegal Parameter 3
+java -jar Client-5785.jar -dest=127.0.0.1 -port=6000 -addresses=68.189.142.23 > "$test22_clientout"
