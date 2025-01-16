@@ -21,7 +21,7 @@ public class RouterConstants {
     public static final String ERROR_WITH_IP_ADDRESS = "Error with IP address: %s%n";
     public static final String ERROR_LISTENING = "Error listening: %s%n";
     public static final String ERROR_READING_TABLE_FILE = "Error reading table file: %s%n";
-    public static final String USAGE_MESSAGE = "Usage: Router-5784 -table=t -ip=ip -port=p%n";
+    public static final String USAGE_MESSAGE = "Usage: Router-5785 -table=t -ip=ip -port=p%n";
     public static final String RECEIVED_CONNECTION_FROM = "Received connection from %s%n";
     public static final String STOPPED_LISTENING = "Stopped listening%n";
 }
