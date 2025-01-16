@@ -12,6 +12,6 @@ public class ClientConstants {
     public static final String NOT_FOUND_OUTPUT = "%s not found%n";
     public static final String FOUND_OUTPUT = "%s -> %s%n";
     public static final String ERROR_COMMUNICATING = "Error communicating: %s%n";
-    public static final String USAGE_MESSAGE = "Usage: Client-5784 -dest=ip -port=p -addresses=adds%n";
+    public static final String USAGE_MESSAGE = "Usage: Client-5785 -dest=ip -port=p -addresses=adds%n";
     public static final String ERROR_MISSING_PARAMETER = "Error missing parameter%n";
 }
